@@ -1,26 +1,20 @@
 export const ROUTER = {
   SONG: {
-    label: 'Bài hát',
-    path: 'manage-song'
+    INDEX: '/manage-song'
   },
   ARTIST: {
-    label: 'Ca Sĩ',
-    path: 'manage-artist'
+    INDEX: '/manage-artist'
   },
   GENRE: {
-    label: 'Thể loại',
-    path: 'manage-genre'
+    INDEX: '/manage-genre'
   },
   PLAYLIST: {
-    label: 'playlist',
-    path: 'manage-playlist'
+    INDEX: '/manage-playlist'
   },
   ALBUM: {
-    label: 'album',
-    path: 'manage-album'
+    INDEX: '/manage-album'
   },
   USER: {
-    label: 'Người dùng',
-    path: 'manage-user'
+    INDEX: '/manage-user'
   }
 };

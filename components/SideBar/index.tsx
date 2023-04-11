@@ -13,35 +13,127 @@ import {
   IconButton,
   Typography,
   Drawer,
-  Stack
+  Stack,
+  SxProps
 } from '@mui/material';
+import { ROUTER } from '@muzique/constants/router';
 import Image from 'next/image';
 import React from 'react';
-
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 export const drawerWidth = 240;
 const SideBar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const router = useRouter();
+  const sideBar: {
+    label: string;
+    path: string;
+    Icon: ({ color }: { color: string }) => JSX.Element;
+  }[] = [
+    {
+      label: 'Bài hát',
+      path: ROUTER.SONG.INDEX,
+      Icon: ({ color }) => <MusicNoteIcon htmlColor={color} />
+    },
+    {
+      label: 'Ca sĩ',
+      path: ROUTER.ARTIST.INDEX,
+      Icon: ({ color }) => <RecordVoiceOverIcon htmlColor={color} />
+    },
+    {
+      label: 'Thể loại',
+      path: ROUTER.GENRE.INDEX,
+      Icon: ({ color }) => <AutoAwesomeMosaicIcon htmlColor={color} />
+    },
+    {
+      label: 'Playlist',
+      path: ROUTER.PLAYLIST.INDEX,
+      Icon: ({ color }) => <QueueMusicIcon htmlColor={color} />
+    },
+    {
+      label: 'Album',
+      path: ROUTER.ALBUM.INDEX,
+      Icon: ({ color }) => <LibraryMusicIcon htmlColor={color} />
+    },
+    {
+      label: 'Người dùng',
+      path: ROUTER.USER.INDEX,
+      Icon: ({ color }) => <AccountCircleIcon htmlColor={color} />
+    }
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
+  const CustomDrawer = () => (
     <div>
       <Stack alignItems={'center'} justifyContent={'center'} py={'5px'}>
         <Image src={'/images/Logo.svg'} alt="logo" width={75} height={75} />
       </Stack>
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+        {sideBar.map(({ label, path, Icon }) => (
+          // <ListItem
+          //   key={path}
+          //   disablePadding
+          //   sx={{
+          //     mx: 1,
+          //     ...(router.pathname === path
+          //       ? {
+          //           color: 'white',
+          //           backgroundColor: 'info.main',
+          //           borderRadius: '10px'
+          //         }
+          //       : {})
+          //   }}
+          // >
+          //   <ListItemButton
+          //     onClick={() => {
+          //       router.push(path);
+          //     }}
+          //   >
+          //     <ListItemIcon>
+          //       <Icon color={router.pathname === path ? 'white' : ''} />
+          //     </ListItemIcon>
+          //     <ListItemText primary={label} />
+          //   </ListItemButton>
+          // </ListItem>
+          <Stack
+            direction={'row'}
+            key={path}
+            spacing={2}
+            onClick={() => {
+              router.push(path);
+            }}
+            sx={{
+              m: 1,
+              px: 1,
+              py: 1,
+              borderRadius: '5px',
+              cursor: 'pointer',
+              '&:hover': {
+                opacity: '0.8',
+                backgroundColor: 'info.main',
+                color: 'white'
+              },
+              ...(router.pathname === path
+                ? {
+                    color: 'white',
+                    backgroundColor: 'info.main'
+                  }
+                : {})
+            }}
+          >
+            <Icon color={router.pathname === path ? 'white' : ''} />
+            <Typography>{label}</Typography>
+          </Stack>
         ))}
       </List>
     </div>
@@ -78,7 +170,7 @@ const SideBar = () => {
             }
           }}
         >
-          {drawer}
+          <CustomDrawer />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -91,7 +183,7 @@ const SideBar = () => {
           }}
           open
         >
-          {drawer}
+          <CustomDrawer />
         </Drawer>
       </Box>
     </>
