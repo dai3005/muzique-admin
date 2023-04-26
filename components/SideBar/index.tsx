@@ -25,6 +25,7 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 export const drawerWidth = 240;
@@ -36,6 +37,11 @@ const SideBar = () => {
     path: string;
     Icon: ({ color }: { color: string }) => JSX.Element;
   }[] = [
+    {
+      label: 'Tổng quan',
+      path: ROUTER.HOME.INDEX,
+      Icon: ({ color }) => <DashboardIcon htmlColor={color} />
+    },
     {
       label: 'Bài hát',
       path: ROUTER.SONG.INDEX,
@@ -80,31 +86,6 @@ const SideBar = () => {
       <Divider />
       <List>
         {sideBar.map(({ label, path, Icon }) => (
-          // <ListItem
-          //   key={path}
-          //   disablePadding
-          //   sx={{
-          //     mx: 1,
-          //     ...(router.pathname === path
-          //       ? {
-          //           color: 'white',
-          //           backgroundColor: 'info.main',
-          //           borderRadius: '10px'
-          //         }
-          //       : {})
-          //   }}
-          // >
-          //   <ListItemButton
-          //     onClick={() => {
-          //       router.push(path);
-          //     }}
-          //   >
-          //     <ListItemIcon>
-          //       <Icon color={router.pathname === path ? 'white' : ''} />
-          //     </ListItemIcon>
-          //     <ListItemText primary={label} />
-          //   </ListItemButton>
-          // </ListItem>
           <Stack
             direction={'row'}
             key={path}

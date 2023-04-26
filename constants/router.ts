@@ -1,4 +1,7 @@
 export const ROUTER = {
+  HOME: {
+    INDEX: '/'
+  },
   SONG: {
     INDEX: '/manage-song'
   },

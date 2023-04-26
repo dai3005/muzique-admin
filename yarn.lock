@@ -51,6 +51,39 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@devexpress/dx-core@3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-3.0.6.tgz#d30f1cb883fc47fabe83f0cf4c9691b9e5c4a732"
+  integrity sha512-Qx66s+fi1aylQr+Li6OXtUOF5t4zJkYAMN1oM7rua9iJI4raoKBm5aRuYpW0ZLMChJzBAqOHfRpICKbX/QNE4Q==
+
+"@devexpress/dx-grid-core@3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-3.0.6.tgz#b6e1bf3f0041313f5b064d511d52ecb9037456cd"
+  integrity sha512-9uR7cdP3i5sUTQUo1qHag+HlDl5iwPAY6y6M5szrNv2wE8y3GIyQqpbaNVmsqS1E2XQYod21qoft1wsscfARsA==
+
+"@devexpress/dx-react-core@^3.0.2":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-3.0.6.tgz#85d3cccfc53d172626ec624d24c6063bb76c8564"
+  integrity sha512-cKH3PknwFbJp2R9Du8+DhvN4gHlZtz0UxCBcXhpvXncLHdwYV3kkwmXrFaG5lfHQBSzVSIg8XkSN5dBXZELAPA==
+  dependencies:
+    "@devexpress/dx-core" "3.0.6"
+    prop-types "^15.7.2"
+
+"@devexpress/dx-react-grid-material-ui@^3.0.2":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-3.0.6.tgz#f9556aec706af46d000678e5e633e287899c934a"
+  integrity sha512-hFTy+lZ5+LEdpIm5VBOHERnX+ZBPFsjn4Repf0Mv+lTqXfPBSmtGBfDgaz3T4zw+7DEn18e+qnDy3HDik6ySYA==
+  dependencies:
+    clsx "^1.0.4"
+    prop-types "^15.7.2"
+
+"@devexpress/dx-react-grid@^3.0.2":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-3.0.6.tgz#a267be782983aeac69c068e3c3db9673ae0992c9"
+  integrity sha512-ZdILt7ZNkNu2jofeZ3+dPB4J9v8Zpl6pEbC4kUyi9tqWhOtoejJtla9lllHTjXSqHMIxZmV1cGKF3n96lEcvlw==
+  dependencies:
+    "@devexpress/dx-grid-core" "3.0.6"
+
 "@emotion/babel-plugin@^11.10.6":
   version "11.10.6"
   resolved "https://registry.yarnpkg.com/@emotion/babel-plugin/-/babel-plugin-11.10.6.tgz#a68ee4b019d661d6f37dec4b8903255766925ead"
@@ -726,7 +759,7 @@ client-only@0.0.1:
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
-clsx@^1.2.1:
+clsx@^1.0.4, clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
@@ -2112,7 +2145,7 @@ prettier@^2.8.7:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.7.tgz#bb79fc8729308549d28fe3a98fce73d2c0656450"
   integrity sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==
 
-prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
