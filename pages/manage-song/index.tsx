@@ -3,7 +3,7 @@ import Table, { Action, Col } from '@muzique/components/pages/CustomTable';
 import { HEADER } from '@muzique/constants/header';
 import { apiCall } from '@muzique/helper/axios';
 import { getFile } from '@muzique/helper/helper';
-import { Song } from '@muzique/models/Song';
+import { Song, SongDetail } from '@muzique/models/Song';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import _ from 'lodash';
@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { responsiveFontSizes } from '@mui/material';
 import Swal from 'sweetalert2';
+import SongModal from '@muzique/components/pages/SongModal';
 
 const ManageSongPage = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -20,6 +21,11 @@ const ManageSongPage = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [songDetail, setSongDetail] = useState<SongDetail>();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const cols: Col[] = [
     {
@@ -102,7 +108,17 @@ const ManageSongPage = () => {
   }, [filters, pageSize, currentPage]);
 
   const editSong = (id: number) => {
-    console.log(id);
+    apiCall({
+      url: '/getSongDetail',
+      method: 'get',
+      headers: HEADER.HEADER_DEFAULT,
+      params: {
+        id
+      }
+    }).then((response) => {
+      setSongDetail(response.data);
+      setOpen(true);
+    });
   };
 
   const deleteSong = (id: number) => {
@@ -137,23 +153,26 @@ const ManageSongPage = () => {
   };
 
   return (
-    <Table
-      rows={songs}
-      filters={filters}
-      onFiltersChange={setFilters}
-      pageSize={pageSize}
-      totalCount={totalCount}
-      currentPage={currentPage}
-      setCurrentPage={(e) => {
-        setCurrentPage(e);
-      }}
-      setPageSize={(e) => {
-        setPageSize(e);
-      }}
-      cols={cols}
-      actions={actions}
-      tableColumnExtensions={tableColumnExtensions}
-    />
+    <>
+      <Table
+        rows={songs}
+        filters={filters}
+        onFiltersChange={setFilters}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        setCurrentPage={(e) => {
+          setCurrentPage(e);
+        }}
+        setPageSize={(e) => {
+          setPageSize(e);
+        }}
+        cols={cols}
+        actions={actions}
+        tableColumnExtensions={tableColumnExtensions}
+      />
+      <SongModal song={songDetail} open={open} handleClose={handleClose} />
+    </>
   );
 };
 
