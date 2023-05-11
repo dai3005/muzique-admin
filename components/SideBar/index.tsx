@@ -134,6 +134,7 @@ const SideBar = () => {
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
+        zIndex={1000}
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer

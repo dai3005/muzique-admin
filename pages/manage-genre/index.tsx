@@ -30,7 +30,7 @@ const ManageGenrePage = () => {
           <img
             width={100}
             height={100}
-            style={{ borderRadius: '3px' }}
+            style={{ borderRadius: '3px', objectFit: 'contain' }}
             src={`${image}`}
             alt="genre"
           />
@@ -75,7 +75,7 @@ const ManageGenrePage = () => {
           keyword: f?.find((e) => e.columnName === 'name')?.value
         }
       }).then((response) => {
-        setGenres(response.data.listGenre);
+        setGenres(response.data.listData);
         setTotalCount(response.data.totalRes);
       });
     }, 500),
@@ -93,14 +93,14 @@ const ManageGenrePage = () => {
   const deleteSong = (id: number) => {
     Swal.fire({
       icon: 'question',
-      title: `Bạn có chắc là muốn xoá bài hát này?`,
+      title: `Bạn có chắc là muốn xoá thể loại này?`,
       showCancelButton: true,
       didClose: function () {
         return;
       },
       preConfirm: function () {
         apiCall({
-          url: '/deleteSong',
+          url: '/deleteGenre',
           method: 'delete',
           headers: HEADER.HEADER_DEFAULT,
           params: {
@@ -110,7 +110,7 @@ const ManageGenrePage = () => {
           if (response.status == 200) {
             Swal.fire({
               icon: 'success',
-              title: 'Bạn đã xoá bài hát này thành công!',
+              title: 'Bạn đã xoá thể loại này thành công!',
               preConfirm: function () {
                 getListGenre(filters ?? [], pageSize, currentPage);
               }

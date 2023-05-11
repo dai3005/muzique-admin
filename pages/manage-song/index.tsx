@@ -10,9 +10,11 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { responsiveFontSizes } from '@mui/material';
+import { Button, responsiveFontSizes } from '@mui/material';
 import Swal from 'sweetalert2';
 import SongModal from '@muzique/components/pages/SongModal';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 const ManageSongPage = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -25,7 +27,10 @@ const ManageSongPage = () => {
   const [songDetail, setSongDetail] = useState<SongDetail>();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setSongDetail(undefined);
+    setOpen(false);
+  };
 
   const cols: Col[] = [
     {
@@ -37,7 +42,7 @@ const ManageSongPage = () => {
           <img
             width={100}
             height={100}
-            style={{ borderRadius: '3px' }}
+            style={{ borderRadius: '3px', objectFit: 'contain' }}
             src={`${image}`}
             alt="song"
           />
@@ -52,9 +57,11 @@ const ManageSongPage = () => {
       getCellValue: (row: Song) => {
         let song = getFile(row.audioUrl);
         return (
-          <audio controls>
-            <source src={`${song}`} type="audio/mpeg"></source>
-          </audio>
+          <AudioPlayer
+            src={song}
+            autoPlay={false}
+            autoPlayAfterSrcChange={false}
+          />
         );
       },
       filteringEnabled: false
@@ -79,8 +86,9 @@ const ManageSongPage = () => {
     }
   ];
   const tableColumnExtensions = [
+    { columnName: 'name', width: 300 },
     { columnName: 'coverImageUrl', width: 150 },
-    { columnName: 'audioUrl', width: 350 },
+    { columnName: 'audioUrl', width: 400 },
     { columnName: 'createdAt', width: 150 },
     { columnName: 'action', width: 150 }
   ];
@@ -154,6 +162,13 @@ const ManageSongPage = () => {
 
   return (
     <>
+      <Button
+        variant="contained"
+        sx={{ margin: '20px' }}
+        onClick={() => setOpen(true)}
+      >
+        Tạo bài hát mới
+      </Button>
       <Table
         rows={songs}
         filters={filters}
@@ -171,7 +186,15 @@ const ManageSongPage = () => {
         actions={actions}
         tableColumnExtensions={tableColumnExtensions}
       />
-      <SongModal song={songDetail} open={open} handleClose={handleClose} />
+      <SongModal
+        key={songDetail?.song.songId ?? 'createSongModal'}
+        song={songDetail}
+        open={open}
+        handleClose={handleClose}
+        reloadPage={() => {
+          getListSong(filters ?? [], pageSize, currentPage);
+        }}
+      />
     </>
   );
 };

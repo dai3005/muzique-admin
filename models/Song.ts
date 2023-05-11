@@ -8,6 +8,7 @@ export type Song = {
   albumId: number;
   createdAt: string;
   updatedAt: string;
+  lyric: string;
 };
 
 export type SongDetail = {
