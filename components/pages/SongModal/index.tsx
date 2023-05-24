@@ -1,4 +1,4 @@
-import { UploadFile } from '@mui/icons-material';
+import { Rotate90DegreesCcw, UploadFile } from '@mui/icons-material';
 import {
   Button,
   Modal,
@@ -40,6 +40,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 700,
+  height: '90%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -203,7 +204,6 @@ const SongModal: FC<Props> = ({ song, open, handleClose, reloadPage }) => {
   ];
 
   const createSong = (fileImg: string, fileSong: string) => {
-    console.log('vào đây không');
     apiCall({
       url: '/createSong',
       method: 'post',
@@ -222,7 +222,6 @@ const SongModal: FC<Props> = ({ song, open, handleClose, reloadPage }) => {
         listPlaylist: listPlaylist
       }
     }).then((response) => {
-      console.log(response.status);
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -237,16 +236,54 @@ const SongModal: FC<Props> = ({ song, open, handleClose, reloadPage }) => {
   };
 
   const updateSong = (fileImg: string, fileSong: string) => {
+    const oldA: number[] = _.difference(song?.listArtistId, listArtists ?? []);
+    const newA: number[] = _.difference(listArtists, song?.listArtistId ?? []);
+    const oldG: number[] = _.difference(song?.listGenreId, listGenre ?? []);
+    const newG: number[] = _.difference(listGenre, song?.listGenreId ?? []);
+    const oldP: number[] = _.difference(
+      song?.listPlaylistId,
+      listPlaylist ?? []
+    );
+    const newP: number[] = _.difference(
+      listPlaylist,
+      song?.listPlaylistId ?? []
+    );
+
     apiCall({
-      url: '/uploadFile',
-      method: 'get',
+      url: '/updateSong',
+      method: 'put',
       headers: HEADER.HEADER_DEFAULT,
-      data: {}
-    }).then((response) => {});
+      data: {
+        songId: song?.song.songId,
+        name: songName,
+        nameSearch: removeVietnameseTones(songName ?? ''),
+        audioUrl: fileSong,
+        description: songDes,
+        coverImageUrl: fileImg,
+        lyric: songLyric,
+        albumId: albumId,
+        listArtist: newA,
+        listArtistDelete: oldA,
+        listGenre: newG,
+        listGenreDelete: oldG,
+        listPlaylist: newP,
+        listPlaylistDelete: oldP
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Bạn đã sửa bài hát này thành công!',
+          preConfirm: function () {
+            handleClose();
+            reloadPage();
+          }
+        });
+      }
+    });
   };
 
   const uploadFile = () => {
-    console.log('vào upload');
     apiCall({
       url: '/uploadFile',
       method: 'post',
@@ -264,14 +301,6 @@ const SongModal: FC<Props> = ({ song, open, handleClose, reloadPage }) => {
       }
     });
   };
-
-  const o = [1, 2, 3];
-
-  const n = [2, 3, 4, 5];
-
-  const oldCategories = _.difference(o, n); // [1]
-
-  const newca = _.difference(n, o); // [4, 5]
 
   return (
     <div>

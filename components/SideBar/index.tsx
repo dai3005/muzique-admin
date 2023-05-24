@@ -37,11 +37,11 @@ const SideBar = () => {
     path: string;
     Icon: ({ color }: { color: string }) => JSX.Element;
   }[] = [
-    {
-      label: 'Tổng quan',
-      path: ROUTER.HOME.INDEX,
-      Icon: ({ color }) => <DashboardIcon htmlColor={color} />
-    },
+    // {
+    //   label: 'Tổng quan',
+    //   path: ROUTER.HOME.INDEX,
+    //   Icon: ({ color }) => <DashboardIcon htmlColor={color} />
+    // },
     {
       label: 'Bài hát',
       path: ROUTER.SONG.INDEX,

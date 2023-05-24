@@ -1,0 +1,14 @@
+{
+  "listData": [
+    {
+      "genreId": 1,
+      "name": "V-Pop",
+      "nameSearch": "V Pop",
+      "description": "Các bài hát nhạc Pop tiếng Việt",
+      "coverImageUrl": "string",
+      "createdAt": "2023-04-18T22:32:22",
+      "updatedAt": null
+    }
+  ],
+  "totalRes": 1
+}

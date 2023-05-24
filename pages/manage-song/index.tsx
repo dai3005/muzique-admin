@@ -110,6 +110,9 @@ const ManageSongPage = () => {
     }, 500),
     []
   );
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [pageSize]);
 
   useEffect(() => {
     getListSong(filters ?? [], pageSize, currentPage);

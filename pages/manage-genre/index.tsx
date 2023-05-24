@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Genre } from '@muzique/models/Genre';
+import OtherModal from '@muzique/components/pages/OtherModal';
+import { Button } from '@mui/material';
 
 const ManageGenrePage = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -19,6 +21,14 @@ const ManageGenrePage = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [genreDetail, setGenreDetail] = useState<Genre>();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setGenreDetail(undefined);
+    setOpen(false);
+  };
 
   const cols: Col[] = [
     {
@@ -51,11 +61,11 @@ const ManageGenrePage = () => {
   const actions: Action[] = [
     {
       icon: <EditIcon htmlColor="blue" sx={{ cursor: 'pointer' }} />,
-      onClick: (genre: Genre) => editSong(genre.genreId)
+      onClick: (genre: Genre) => editGenre(genre.genreId)
     },
     {
       icon: <DeleteOutlineIcon htmlColor="red" sx={{ cursor: 'pointer' }} />,
-      onClick: (genre: Genre) => deleteSong(genre.genreId)
+      onClick: (genre: Genre) => deleteGenre(genre.genreId)
     }
   ];
   const tableColumnExtensions = [
@@ -81,16 +91,28 @@ const ManageGenrePage = () => {
     }, 500),
     []
   );
-
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [pageSize]);
   useEffect(() => {
     getListGenre(filters ?? [], pageSize, currentPage);
   }, [filters, pageSize, currentPage]);
 
-  const editSong = (id: number) => {
-    console.log(id);
+  const editGenre = (id: number) => {
+    apiCall({
+      url: '/getGenreDetail',
+      method: 'get',
+      headers: HEADER.HEADER_DEFAULT,
+      params: {
+        id
+      }
+    }).then((response) => {
+      setGenreDetail(response.data);
+      setOpen(true);
+    });
   };
 
-  const deleteSong = (id: number) => {
+  const deleteGenre = (id: number) => {
     Swal.fire({
       icon: 'question',
       title: `Bạn có chắc là muốn xoá thể loại này?`,
@@ -122,23 +144,41 @@ const ManageGenrePage = () => {
   };
 
   return (
-    <Table
-      rows={genres}
-      filters={filters}
-      onFiltersChange={setFilters}
-      pageSize={pageSize}
-      totalCount={totalCount}
-      currentPage={currentPage}
-      setCurrentPage={(e) => {
-        setCurrentPage(e);
-      }}
-      setPageSize={(e) => {
-        setPageSize(e);
-      }}
-      cols={cols}
-      actions={actions}
-      tableColumnExtensions={tableColumnExtensions}
-    />
+    <>
+      <Button
+        variant="contained"
+        sx={{ margin: '20px' }}
+        onClick={() => setOpen(true)}
+      >
+        Tạo thể loại mới
+      </Button>
+      <Table
+        rows={genres}
+        filters={filters}
+        onFiltersChange={setFilters}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        setCurrentPage={(e) => {
+          setCurrentPage(e);
+        }}
+        setPageSize={(e) => {
+          setPageSize(e);
+        }}
+        cols={cols}
+        actions={actions}
+        tableColumnExtensions={tableColumnExtensions}
+      />
+      <OtherModal
+        key={genreDetail?.genreId ?? 'createGenreModal'}
+        detail={genreDetail}
+        open={open}
+        handleClose={handleClose}
+        reloadPage={() => {
+          getListGenre(filters ?? [], pageSize, currentPage);
+        }}
+      />
+    </>
   );
 };
 

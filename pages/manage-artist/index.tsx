@@ -10,6 +10,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { Button } from '@mui/material';
+import OtherModal from '@muzique/components/pages/OtherModal';
 
 const ManageArtistPage = () => {
   const [artist, setArtist] = useState<Artist[]>([]);
@@ -18,6 +20,13 @@ const ManageArtistPage = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [artistDetail, setArtistDetail] = useState<Artist>();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setArtistDetail(undefined);
+    setOpen(false);
+  };
 
   const cols: Col[] = [
     {
@@ -37,7 +46,7 @@ const ManageArtistPage = () => {
       },
       filteringEnabled: false
     },
-    { name: 'name', title: 'Tên thể loại' },
+    { name: 'name', title: 'Tên ca sĩ' },
     { name: 'description', title: 'Mô tả', filteringEnabled: false },
     {
       name: 'createdAt',
@@ -50,11 +59,11 @@ const ManageArtistPage = () => {
   const actions: Action[] = [
     {
       icon: <EditIcon htmlColor="blue" sx={{ cursor: 'pointer' }} />,
-      onClick: (artist: Artist) => editSong(artist.artistId)
+      onClick: (artist: Artist) => editArtist(artist.artistId)
     },
     {
       icon: <DeleteOutlineIcon htmlColor="red" sx={{ cursor: 'pointer' }} />,
-      onClick: (artist: Artist) => deleteSong(artist.artistId)
+      onClick: (artist: Artist) => deleteArtist(artist.artistId)
     }
   ];
   const tableColumnExtensions = [
@@ -85,11 +94,21 @@ const ManageArtistPage = () => {
     getListGenre(filters ?? [], pageSize, currentPage);
   }, [filters, pageSize, currentPage]);
 
-  const editSong = (id: number) => {
-    console.log(id);
+  const editArtist = (id: number) => {
+    apiCall({
+      url: '/getArtistDetail',
+      method: 'get',
+      headers: HEADER.HEADER_DEFAULT,
+      params: {
+        id
+      }
+    }).then((response) => {
+      setArtistDetail(response.data);
+      setOpen(true);
+    });
   };
 
-  const deleteSong = (id: number) => {
+  const deleteArtist = (id: number) => {
     Swal.fire({
       icon: 'question',
       title: `Bạn có chắc là muốn xoá ca sĩ này?`,
@@ -121,23 +140,41 @@ const ManageArtistPage = () => {
   };
 
   return (
-    <Table
-      rows={artist}
-      filters={filters}
-      onFiltersChange={setFilters}
-      pageSize={pageSize}
-      totalCount={totalCount}
-      currentPage={currentPage}
-      setCurrentPage={(e) => {
-        setCurrentPage(e);
-      }}
-      setPageSize={(e) => {
-        setPageSize(e);
-      }}
-      cols={cols}
-      actions={actions}
-      tableColumnExtensions={tableColumnExtensions}
-    />
+    <>
+      <Button
+        variant="contained"
+        sx={{ margin: '20px' }}
+        onClick={() => setOpen(true)}
+      >
+        Tạo ca sĩ mới
+      </Button>
+      <Table
+        rows={artist}
+        filters={filters}
+        onFiltersChange={setFilters}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        setCurrentPage={(e) => {
+          setCurrentPage(e);
+        }}
+        setPageSize={(e) => {
+          setPageSize(e);
+        }}
+        cols={cols}
+        actions={actions}
+        tableColumnExtensions={tableColumnExtensions}
+      />
+      <OtherModal
+        key={artistDetail?.artistId ?? 'createArtistModal'}
+        detail={artistDetail}
+        open={open}
+        handleClose={handleClose}
+        reloadPage={() => {
+          getListGenre(filters ?? [], pageSize, currentPage);
+        }}
+      />
+    </>
   );
 };
 
