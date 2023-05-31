@@ -1,10 +1,10 @@
-export type Album = {
-  albumId: number;
+export type User = {
+  userId: number;
+  email: string;
   coverImageUrl: string;
+  password: string;
   name: string;
   nameSearch: string;
-  description: string;
   createdAt: string;
   updatedAt: string;
-  artistId: number;
 };
