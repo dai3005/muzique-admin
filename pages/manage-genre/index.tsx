@@ -177,6 +177,7 @@ const ManageGenrePage = () => {
         reloadPage={() => {
           getListGenre(filters ?? [], pageSize, currentPage);
         }}
+        type="genre"
       />
     </>
   );

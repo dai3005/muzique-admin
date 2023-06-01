@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import OtherModal from '@muzique/components/pages/OtherModal';
 
 const ManagePlaylistPage = () => {
   const [playlist, setPlaylist] = useState<Playlist[]>([]);
@@ -18,6 +19,14 @@ const ManagePlaylistPage = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [playlistDetail, setPlaylistDetail] = useState<Playlist>();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setPlaylistDetail(undefined);
+    setOpen(false);
+  };
 
   const cols: Col[] = [
     {
@@ -51,11 +60,11 @@ const ManagePlaylistPage = () => {
   const actions: Action[] = [
     {
       icon: <EditIcon htmlColor="blue" sx={{ cursor: 'pointer' }} />,
-      onClick: (playlist: Playlist) => editSong(playlist.playlistId)
+      onClick: (playlist: Playlist) => editPlaylist(playlist.playlistId)
     },
     {
       icon: <DeleteOutlineIcon htmlColor="red" sx={{ cursor: 'pointer' }} />,
-      onClick: (playlist: Playlist) => deleteSong(playlist.playlistId)
+      onClick: (playlist: Playlist) => deletePlaylist(playlist.playlistId)
     }
   ];
   const tableColumnExtensions = [
@@ -63,7 +72,7 @@ const ManagePlaylistPage = () => {
     { columnName: 'createdAt', width: 150 },
     { columnName: 'action', width: 150 }
   ];
-  const getListGenre = useCallback(
+  const getListPlaylist = useCallback(
     _.debounce((f: Filter[], p, cp) => {
       apiCall({
         url: '/getListPlaylist',
@@ -83,14 +92,24 @@ const ManagePlaylistPage = () => {
   );
 
   useEffect(() => {
-    getListGenre(filters ?? [], pageSize, currentPage);
+    getListPlaylist(filters ?? [], pageSize, currentPage);
   }, [filters, pageSize, currentPage]);
 
-  const editSong = (id: number) => {
-    console.log(id);
+  const editPlaylist = (id: number) => {
+    apiCall({
+      url: '/getPlaylistById',
+      method: 'get',
+      headers: HEADER.HEADER_DEFAULT,
+      params: {
+        id
+      }
+    }).then((response) => {
+      setPlaylistDetail(response.data);
+      setOpen(true);
+    });
   };
 
-  const deleteSong = (id: number) => {
+  const deletePlaylist = (id: number) => {
     Swal.fire({
       icon: 'question',
       title: `Bạn có chắc là muốn xoá playlist này?`,
@@ -112,7 +131,7 @@ const ManagePlaylistPage = () => {
               icon: 'success',
               title: 'Bạn đã xoá playlist này thành công!',
               preConfirm: function () {
-                getListGenre(filters ?? [], pageSize, currentPage);
+                getListPlaylist(filters ?? [], pageSize, currentPage);
               }
             });
           }
@@ -122,23 +141,35 @@ const ManagePlaylistPage = () => {
   };
 
   return (
-    <Table
-      rows={playlist}
-      filters={filters}
-      onFiltersChange={setFilters}
-      pageSize={pageSize}
-      totalCount={totalCount}
-      currentPage={currentPage}
-      setCurrentPage={(e) => {
-        setCurrentPage(e);
-      }}
-      setPageSize={(e) => {
-        setPageSize(e);
-      }}
-      cols={cols}
-      actions={actions}
-      tableColumnExtensions={tableColumnExtensions}
-    />
+    <>
+      <Table
+        rows={playlist}
+        filters={filters}
+        onFiltersChange={setFilters}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        setCurrentPage={(e) => {
+          setCurrentPage(e);
+        }}
+        setPageSize={(e) => {
+          setPageSize(e);
+        }}
+        cols={cols}
+        actions={actions}
+        tableColumnExtensions={tableColumnExtensions}
+      />
+      <OtherModal
+        key={playlistDetail?.playlistId ?? 'createPlaylistModal'}
+        detail={playlistDetail}
+        open={open}
+        handleClose={handleClose}
+        reloadPage={() => {
+          getListPlaylist(filters ?? [], pageSize, currentPage);
+        }}
+        type="playlist"
+      />
+    </>
   );
 };
 

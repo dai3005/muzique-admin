@@ -144,13 +144,6 @@ const ManageUserPage = () => {
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ margin: '20px' }}
-        onClick={() => setOpen(true)}
-      >
-        Tạo thể loại mới
-      </Button>
       <Table
         rows={users}
         filters={filters}
@@ -176,6 +169,7 @@ const ManageUserPage = () => {
         reloadPage={() => {
           getListUser(filters ?? [], pageSize, currentPage);
         }}
+        type="user"
       />
     </>
   );

@@ -1,16 +1,11 @@
-import { Rotate90DegreesCcw, UploadFile } from '@mui/icons-material';
 import {
   Button,
   Modal,
-  Box,
   Typography,
   TextField,
-  MenuItem,
   Autocomplete,
   Stack,
-  OutlinedInput,
-  Divider,
-  useStepContext
+  Divider
 } from '@mui/material';
 import { HEADER } from '@muzique/constants/header';
 import { apiCall } from '@muzique/helper/axios';
@@ -19,9 +14,8 @@ import { Album } from '@muzique/models/Album';
 import { Artist } from '@muzique/models/Artist';
 import { Genre } from '@muzique/models/Genre';
 import { Playlist } from '@muzique/models/Playlist';
-import { Song, SongDetail } from '@muzique/models/Song';
-import { promises } from 'dns';
-import _, { forEach } from 'lodash';
+import { SongDetail } from '@muzique/models/Song';
+import _ from 'lodash';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';

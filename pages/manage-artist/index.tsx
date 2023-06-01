@@ -173,6 +173,7 @@ const ManageArtistPage = () => {
         reloadPage={() => {
           getListGenre(filters ?? [], pageSize, currentPage);
         }}
+        type="artist"
       />
     </>
   );

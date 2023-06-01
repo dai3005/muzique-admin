@@ -9,14 +9,18 @@ import {
 } from '@mui/material';
 import { HEADER } from '@muzique/constants/header';
 import { apiCall } from '@muzique/helper/axios';
-import { getFile } from '@muzique/helper/helper';
+import { getFile, removeVietnameseTones } from '@muzique/helper/helper';
+import { update } from 'lodash';
+import { type } from 'os';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 type Props = {
   detail: any;
   open: boolean;
   handleClose: () => void;
   reloadPage: () => void;
+  type: string;
 };
 
 const style = {
@@ -31,12 +35,17 @@ const style = {
   p: 4
 };
 
-const OtherModal: FC<Props> = ({ detail, open, handleClose, reloadPage }) => {
+const OtherModal: FC<Props> = ({
+  detail,
+  open,
+  handleClose,
+  reloadPage,
+  type
+}) => {
   const [name, setName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [imgFile, setImgFile] = useState<File>();
   const [objectImage, setObjectImage] = useState<string>();
-
   useEffect(() => {
     if (detail) {
       setName(detail.name);
@@ -56,11 +65,66 @@ const OtherModal: FC<Props> = ({ detail, open, handleClose, reloadPage }) => {
     }).then((response) => {
       if (response.status === 200) {
         if (detail) {
+          updateObject(response.data.filePathImage);
         } else {
+          createObject(response.data.filePathImage);
         }
       }
     });
   };
+
+  const createObject = (fileImg: string) => {
+    apiCall({
+      url: `/create${type[0].toUpperCase()}${type.slice(1)}`,
+      method: 'post',
+      headers: HEADER.HEADER_DEFAULT,
+      data: {
+        [`${type}Id`]: 0,
+        name: name,
+        nameSearch: removeVietnameseTones(name ?? ''),
+        description: description,
+        coverImageUrl: fileImg
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: `Bạn đã tạo ${type} này thành công!`,
+          preConfirm: function () {
+            handleClose();
+            reloadPage();
+          }
+        });
+      }
+    });
+  };
+
+  const updateObject = (fileImg: string) => {
+    apiCall({
+      url: `/updateAlbum${type[0].toUpperCase()}${type.slice(1)}`,
+      method: 'put',
+      headers: HEADER.HEADER_DEFAULT,
+      data: {
+        objectId: detail.id,
+        name: name,
+        nameSearch: removeVietnameseTones(name ?? ''),
+        description: description,
+        coverImageUrl: fileImg
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: `Bạn đã sửa ${type} này thành công!`,
+          preConfirm: function () {
+            handleClose();
+            reloadPage();
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <Modal
