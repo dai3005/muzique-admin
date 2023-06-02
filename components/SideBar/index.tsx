@@ -14,7 +14,8 @@ import {
   Typography,
   Drawer,
   Stack,
-  SxProps
+  SxProps,
+  Button
 } from '@mui/material';
 import { ROUTER } from '@muzique/constants/router';
 import Image from 'next/image';
@@ -25,9 +26,10 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import Link from 'next/link';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 export const drawerWidth = 240;
 const SideBar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -102,7 +104,7 @@ const SideBar = () => {
               '&:hover': {
                 opacity: '0.8',
                 backgroundColor: 'info.main',
-                color: 'white'
+                color: 'white !important'
               },
               ...(router.pathname === path
                 ? {
@@ -117,6 +119,31 @@ const SideBar = () => {
           </Stack>
         ))}
       </List>
+      <Divider />
+      <Box
+        sx={{
+          px: 1,
+          py: 0.5,
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+      >
+        <Button
+          sx={{
+            gap: '10px',
+            alignItems: 'center',
+            justifyContent: 'start',
+            width: '100%',
+            color: 'red'
+          }}
+          onClick={() => {
+            Cookies.remove('jwtAdmin');
+            window.location.href = '/login';
+          }}
+        >
+          <LogoutIcon /> Đăng xuất{' '}
+        </Button>
+      </Box>
     </div>
   );
 

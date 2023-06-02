@@ -1,7 +1,7 @@
 import exp from 'constants';
 
 export const getFile = (link: string) => {
-  return process.env.NEXT_PUBLIC_BaseUrl + link;
+  return process.env.NEXT_PUBLIC_BE_URL + link;
 };
 export const removeVietnameseTones = function (str: string) {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');

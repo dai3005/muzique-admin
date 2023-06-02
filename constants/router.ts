@@ -19,5 +19,8 @@ export const ROUTER = {
   },
   USER: {
     INDEX: '/manage-user'
+  },
+  LOGIN: {
+    INDEX: '/login'
   }
 };
