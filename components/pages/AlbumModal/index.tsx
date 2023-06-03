@@ -1,3 +1,4 @@
+import { Label } from '@mui/icons-material';
 import {
   Modal,
   Stack,
@@ -138,7 +139,9 @@ const AlbumModal: FC<Props> = ({ album, open, handleClose, reloadPage }) => {
       }
     });
   };
-
+  const artistOptions = artists.map((a) => {
+    return { value: a.artistId, label: a.name };
+  });
   return (
     <div>
       <Modal
@@ -194,16 +197,18 @@ const AlbumModal: FC<Props> = ({ album, open, handleClose, reloadPage }) => {
               />
             </Stack>
             <Autocomplete
-              isOptionEqualToValue={(a, b) => a.artistId === b.artistId}
+              isOptionEqualToValue={(a, b) => a.value === b.value}
               id={'artist'}
-              options={artists}
+              options={artistOptions}
               filterSelectedOptions
-              getOptionLabel={(option) => option.name}
-              value={artists.find((e) => {
-                return e.artistId == artist ?? undefined;
-              })}
+              getOptionLabel={(option) => option.label}
+              value={{
+                value: artist,
+                label:
+                  artistOptions.find((a) => a.value === artist)?.label ?? ''
+              }}
               onChange={(event, v) => {
-                setArtist(v?.artistId);
+                setArtist(v?.value);
               }}
               renderInput={(params) => (
                 <TextField
