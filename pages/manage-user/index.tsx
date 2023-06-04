@@ -162,7 +162,7 @@ const ManageUserPage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <OtherModal
-        key={userDetail?.userId ?? 'createUserModal'}
+        key={userDetail?.userId ?? 'createUserModal' + Date.now()}
         detail={userDetail}
         open={open}
         handleClose={handleClose}

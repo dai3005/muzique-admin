@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import OtherModal from '@muzique/components/pages/OtherModal';
+import { Button } from '@mui/material';
 
 const ManagePlaylistPage = () => {
   const [playlist, setPlaylist] = useState<Playlist[]>([]);
@@ -142,6 +143,13 @@ const ManagePlaylistPage = () => {
 
   return (
     <>
+      <Button
+        variant="contained"
+        sx={{ margin: '20px' }}
+        onClick={() => setOpen(true)}
+      >
+        Tạo playlist mới
+      </Button>
       <Table
         rows={playlist}
         filters={filters}
@@ -160,7 +168,7 @@ const ManagePlaylistPage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <OtherModal
-        key={playlistDetail?.playlistId ?? 'createPlaylistModal'}
+        key={playlistDetail?.playlistId ?? 'createPlaylistModal' + Date.now()}
         detail={playlistDetail}
         open={open}
         handleClose={handleClose}

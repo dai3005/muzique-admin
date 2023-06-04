@@ -167,7 +167,7 @@ const ManageAlbumPage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <AlbumModal
-        key={albumDetail?.albumId ?? 'createAlbumModal'}
+        key={albumDetail?.albumId ?? 'createAlbumModal' + Date.now()}
         album={albumDetail}
         open={open}
         handleClose={handleClose}

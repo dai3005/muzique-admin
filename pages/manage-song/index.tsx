@@ -190,7 +190,7 @@ const ManageSongPage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <SongModal
-        key={songDetail?.song.songId ?? 'createSongModal'}
+        key={songDetail?.song.songId ?? 'createSongModal' + Date.now()}
         song={songDetail}
         open={open}
         handleClose={handleClose}

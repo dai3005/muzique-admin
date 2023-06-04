@@ -170,7 +170,7 @@ const ManageGenrePage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <OtherModal
-        key={genreDetail?.genreId ?? 'createGenreModal'}
+        key={genreDetail?.genreId ?? 'createGenreModal' + Date.now()}
         detail={genreDetail}
         open={open}
         handleClose={handleClose}

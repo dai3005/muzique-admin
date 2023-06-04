@@ -130,7 +130,7 @@ const AlbumModal: FC<Props> = ({ album, open, handleClose, reloadPage }) => {
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
-          title: 'Bạn đã sửa bài hát này thành công!',
+          title: 'Bạn đã sửa album này thành công!',
           preConfirm: function () {
             handleClose();
             reloadPage();

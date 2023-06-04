@@ -166,7 +166,7 @@ const ManageArtistPage = () => {
         tableColumnExtensions={tableColumnExtensions}
       />
       <OtherModal
-        key={artistDetail?.artistId ?? 'createArtistModal'}
+        key={artistDetail?.artistId ?? 'createArtistModal' + Date.now()}
         detail={artistDetail}
         open={open}
         handleClose={handleClose}
