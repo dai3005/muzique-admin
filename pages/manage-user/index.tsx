@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import UserModal from '@muzique/components/pages/UserModal';
 
 const ManageUserPage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -161,7 +162,7 @@ const ManageUserPage = () => {
         actions={actions}
         tableColumnExtensions={tableColumnExtensions}
       />
-      <OtherModal
+      <UserModal
         key={userDetail?.userId ?? 'createUserModal' + Date.now()}
         detail={userDetail}
         open={open}
@@ -169,7 +170,6 @@ const ManageUserPage = () => {
         reloadPage={() => {
           getListUser(filters ?? [], pageSize, currentPage);
         }}
-        type="user"
       />
     </>
   );

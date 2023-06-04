@@ -3,15 +3,12 @@ import {
   Stack,
   TextField,
   Typography,
-  Autocomplete,
   Divider,
   Button
 } from '@mui/material';
 import { HEADER } from '@muzique/constants/header';
 import { apiCall } from '@muzique/helper/axios';
 import { getFile, removeVietnameseTones } from '@muzique/helper/helper';
-import { update } from 'lodash';
-import { type } from 'os';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
@@ -20,7 +17,6 @@ type Props = {
   open: boolean;
   handleClose: () => void;
   reloadPage: () => void;
-  type: string;
 };
 
 const style = {
@@ -35,21 +31,13 @@ const style = {
   p: 4
 };
 
-const OtherModal: FC<Props> = ({
-  detail,
-  open,
-  handleClose,
-  reloadPage,
-  type
-}) => {
+const UserModal: FC<Props> = ({ detail, open, handleClose, reloadPage }) => {
   const [name, setName] = useState<string>();
-  const [description, setDescription] = useState<string>();
   const [imgFile, setImgFile] = useState<File>();
   const [objectImage, setObjectImage] = useState<string>();
   useEffect(() => {
     if (detail) {
       setName(detail.name);
-      setDescription(detail.description);
       setObjectImage(getFile(detail.coverImageUrl));
     }
   }, [detail]);
@@ -75,21 +63,20 @@ const OtherModal: FC<Props> = ({
 
   const createObject = (fileImg: string) => {
     apiCall({
-      url: `/create${type[0].toUpperCase()}${type.slice(1)}`,
+      url: `/createUser`,
       method: 'post',
       headers: HEADER.HEADER_DEFAULT,
       data: {
-        [`${type}Id`]: 0,
+        userId: 0,
         name: name,
         nameSearch: removeVietnameseTones(name ?? ''),
-        description: description,
         coverImageUrl: fileImg
       }
     }).then((response) => {
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
-          title: `Bạn đã tạo ${type} này thành công!`,
+          title: `Bạn đã tạo người dùng này thành công!`,
           preConfirm: function () {
             handleClose();
             reloadPage();
@@ -101,21 +88,20 @@ const OtherModal: FC<Props> = ({
 
   const updateObject = (fileImg: string) => {
     apiCall({
-      url: `/updateAlbum${type[0].toUpperCase()}${type.slice(1)}`,
+      url: `/updateUser`,
       method: 'put',
       headers: HEADER.HEADER_DEFAULT,
       data: {
-        [`${type}Id`]: detail.id,
+        userId: detail.id,
         name: name,
         nameSearch: removeVietnameseTones(name ?? ''),
-        description: description,
         coverImageUrl: fileImg
       }
     }).then((response) => {
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
-          title: `Bạn đã sửa ${type} này thành công!`,
+          title: `Bạn đã sửa người dùng này thành công!`,
           preConfirm: function () {
             handleClose();
             reloadPage();
@@ -179,15 +165,6 @@ const OtherModal: FC<Props> = ({
                 alt="img"
               />
             </Stack>
-            <TextField
-              id="description"
-              multiline={true}
-              rows={2}
-              label="Mô tả"
-              variant="outlined"
-              value={description ?? ''}
-              onChange={(e) => setDescription(e.target.value)}
-            />
           </Stack>
           <Divider sx={{ marginTop: '10px' }} />
           <Stack
@@ -215,4 +192,4 @@ const OtherModal: FC<Props> = ({
   );
 };
 
-export default OtherModal;
+export default UserModal;
